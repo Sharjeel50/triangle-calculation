@@ -5,7 +5,7 @@ from Triangle import Triangle
 class DataResult:
     def __init__(self, file):
         self._file = file
-        self.tupled_data()  #
+        self.tupled_data()
 
     def triangle_product_creation(self):
         with open(self._file, "r") as csv_file:
@@ -18,6 +18,9 @@ class DataResult:
 
     def product_splitting(self):
         products = {}
+
+        # Loop through yielded data
+        # Keep key as product and values as the rest and return
         for objects in self.triangle_product_creation():
             if objects.product not in products:
                 products[objects.product] = [
@@ -38,12 +41,22 @@ class DataResult:
 
     def do_calc(self, data):
         res = []
+
+        # Loop through data
+        # Check if products match
+        # if the origin and development date is the same, append product name and incremental value to res
+        # elif there is one development year, add the previous values incremental value to the currents and append
+        # do the same for two and three incremental development years and append dem tings in
+        # make sure i have another if for the last value in data since i am looping through - 2
+        # do the same for him and append.
         for i in range(len(data) - 1):
             if data[i][0] == data[i + 1][0]:
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
                 elif int(data[i][1]) + 1 == int(data[i][2]):
                     res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+                else:
+                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3]) + float(data[i - 2][3])))
             else:
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
@@ -53,10 +66,18 @@ class DataResult:
         if data[-1][1] == data[-1][2]:
             res.append((data[-1][0], data[-1][3]))
         elif int(data[-2][1]) + 1 == int(data[-1][2]):
-            res.append((data[-1][0], float(data[])))
-
+            res.append((data[-1][0], float(data[-1][3]) + float(data[-2][3])))
 
         print(res)
+
+        return res
+
+    # Make new csv file and add it to the current folder with the result data inside
+    # print out that the file is made
+    def make_res_csv(self):
+        with open("results" + self._file, 'w', newline='') as myfile:
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr.writerow()
 
 
 def main():
