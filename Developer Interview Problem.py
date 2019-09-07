@@ -5,7 +5,7 @@ from Triangle import Triangle
 class DataResult:
     def __init__(self, file):
         self._file = file
-        self.test()
+        self.tupled_data()  #
 
     def triangle_product_creation(self):
         with open(self._file, "r") as csv_file:
@@ -27,11 +27,39 @@ class DataResult:
                     [objects.origin_year, objects.development_year, objects.incremental_value]]
         return products
 
+    def tupled_data(self):
+        data = []
+        for k, rows in self.product_splitting().items():
+            for row in rows:
+                item = (k, row[0], row[1], row[2])
+                data.append(item)
 
-    def test(self):
-        for k, v in self.product_splitting().items():
-            print(self.product_splitting()[k])
+        self.do_calc(data)
 
+    def do_calc(self, data):
+        res = []
+        for i in range(len(data) - 1):
+            if data[i][0] == data[i + 1][0]:
+                if data[i][1] == data[i][2]:
+                    print(data[i], "first if")
+                    res.append((data[i][0], data[i][3]))
+                elif int(data[i][1]) + 1 == int(data[i][2]):
+                    print(data[i], "second if")
+                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+            else:
+                if data[i][1] == data[i][2]:
+                    print(data[i], "first if - - - ")
+                    res.append((data[i][0], data[i][3]))
+                else:
+                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+                    print(data[i], "second if - - - ")
+
+        if data[-1][1] == data[-1][2]:
+            res.append((data[-1][0], data[-1][3]))
+        else:
+            
+
+        print(res)
 
 
 def main():
