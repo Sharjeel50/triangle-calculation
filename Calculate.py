@@ -4,11 +4,13 @@ from Triangle import Triangle
 
 class DataResult:
     def __init__(self, file):
+        self.res = []
         self._file = file
         self.res = []
         self.tupled_data()
 
-    def triangle_product_creation(self):
+    # Yielded to save memory
+    def create_triangle_objects(self):
         with open(self._file, "r") as csv_file:
             csv_reader = csv.reader(csv_file)
             # Skip Headers
@@ -22,7 +24,7 @@ class DataResult:
 
         # Loop through yielded data
         # Keep key as product and values as the rest and return
-        for objects in self.triangle_product_creation():
+        for objects in self.create_triangle_objects():
             if objects.product not in products:
                 products[objects.product] = [
                     [objects.origin_year, objects.development_year, objects.incremental_value]]
@@ -31,6 +33,8 @@ class DataResult:
                     [objects.origin_year, objects.development_year, objects.incremental_value]]
         return products
 
+    # Tuple all the data up along side the correct vals (origin_date, development_date, incremental_val)
+    # Run self.do_calc on the data
     def tupled_data(self):
         data = []
         for k, rows in self.product_splitting().items():
@@ -84,34 +88,15 @@ class DataResult:
             expected_dates = list(range(int(data[i][1]), int(data[i][2]) + 1))
             actual_dates.append(int(data[i - iterations_range][2]))
             missing_dates = list(set(expected_dates) - set(actual_dates))
-        if missing_dates[0] == int(data[i][2]) - 1:
-            self.res.append((data[i][0], incremental_val - float(data[i][3])))
+        for p in range(len(missing_dates)):
+            if missing_dates[p] == int(data[i][2]) - p - 1:
+                self.res.append((data[i][0], incremental_val - float(data[i][3])))
         self.res.append((data[i][0], incremental_val))
 
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
     def make_res_csv(self):
-        with open("results_" + self._file, 'w', newline='') as my_file:
+        with open("Result_File_" + self._file, 'w', newline='') as my_file:
             wr = csv.writer(my_file, quoting=csv.QUOTE_ALL)
             wr.writerow(self.res)
-
-
-def main():
-    print("\n")
-    print("Enter 'Exit' to close program")
-    file = input("Enter file name: ") + ".csv".lower()
-    print("\n")
-    if file == "exit.csv" or file == "Exit.csv":
-        exit()
-    else:
-        try:
-            DataResult(file)
-            main()
-        except Exception as e:
-            print(e, "\n")
-            print(" - Try Again - ")
-            main()
-
-
-if __name__ == "__main__":
-    main()
+            print("Result_File_" + self._file, "Created, Check your directory!")
