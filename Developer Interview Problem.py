@@ -41,8 +41,6 @@ class DataResult:
         self.do_calc(data)
 
     def do_calc(self, data):
-        res = []
-
         # Loop through data
         # Check if products match
         # Check if the origin and development year match, if they do append
@@ -66,9 +64,9 @@ class DataResult:
                         self.do_calc_iterations(data, i, iterations)
             else:
                 if data[i][1] == data[i][2]:
-                    res.append((data[i][0], data[i][3]))
+                    self.res.append((data[i][0], data[i][3]))
                 else:
-                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+                    self.res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
 
         if data[-1][1] == data[-1][2]:
             self.res.append((data[-1][0], data[-1][3]))
@@ -79,21 +77,23 @@ class DataResult:
 
     def do_calc_iterations(self, data, i, iter):
         incremental_val = 0
+        actual_dates = []
+        missing_dates = 0
         for iterations_range in range(iter):
             incremental_val += float(data[i - iterations_range][3])
-            if int(data[i][2]) - iterations_range != int(data[i - iterations_range][2]):
-                print("fuck this shit")
-                print(int(data[i][2]) - iterations_range, int(data[i - iterations_range][2]))
-                self.res.append((data[i][0], incremental_val - float(data[i][3])))
+            expected_dates = list(range(int(data[i][1]), int(data[i][2]) + 1))
+            actual_dates.append(int(data[i - iterations_range][2]))
+            missing_dates = list(set(expected_dates) - set(actual_dates))
+        if missing_dates[0] == int(data[i][2]) - 1:
+            self.res.append((data[i][0], incremental_val - float(data[i][3])))
         self.res.append((data[i][0], incremental_val))
-
 
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
     def make_res_csv(self):
-        with open("results_" + self._file, 'w', newline='') as myfile:
-            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-            wr.writerow()
+        with open("results_" + self._file, 'w', newline='') as my_file:
+            wr = csv.writer(my_file, quoting=csv.QUOTE_ALL)
+            wr.writerow(self.res)
 
 
 def main():
