@@ -5,6 +5,7 @@ from Triangle import Triangle
 class DataResult:
     def __init__(self, file):
         self._file = file
+        self.res = []
         self.tupled_data()
 
     def triangle_product_creation(self):
@@ -54,20 +55,15 @@ class DataResult:
         for i in range(len(data) - 1):
             if data[i][0] == data[i + 1][0]:
                 if data[i][1] == data[i][2]:
-                    res.append((data[i][0], data[i][3]))
+                    self.res.append((data[i][0], data[i][3]))
                 else:
                     iterations = int(data[i][2]) - int(data[i][1])
                     if iterations == 1:
-                        res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+                        self.res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
                     elif iterations == 2:
-                        res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3]) + float(data[i - 2][3])))
+                        self.res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3]) + float(data[i - 2][3])))
                     else:
-                        incremental_val = 0
-                        for iterations_range in range(iterations):
-                            incremental_val += float(data[i - iterations_range][3])
-                        if data[i][2] != int(data[i - 1][2]) - iterations_range:
-                            res.append((data[i][0], incremental_val - float(data[i][3])))
-                        res.append((data[i][0], incremental_val))
+                        self.do_calc_iterations(data, i, iterations)
             else:
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
@@ -75,13 +71,22 @@ class DataResult:
                     res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
 
         if data[-1][1] == data[-1][2]:
-            res.append((data[-1][0], data[-1][3]))
+            self.res.append((data[-1][0], data[-1][3]))
         elif int(data[-2][1]) + 1 == int(data[-1][2]):
-            res.append((data[-1][0], float(data[-1][3]) + float(data[-2][3])))
+            self.res.append((data[-1][0], float(data[-1][3]) + float(data[-2][3])))
 
-        print(res)
+        print(self.res)
 
-        return res
+    def do_calc_iterations(self, data, i, iter):
+        incremental_val = 0
+        for iterations_range in range(iter):
+            incremental_val += float(data[i - iterations_range][3])
+            if int(data[i][2]) - iterations_range != int(data[i - iterations_range][2]):
+                print("fuck this shit")
+                print(int(data[i][2]) - iterations_range, int(data[i - iterations_range][2]))
+                self.res.append((data[i][0], incremental_val - float(data[i][3])))
+        self.res.append((data[i][0], incremental_val))
+
 
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
