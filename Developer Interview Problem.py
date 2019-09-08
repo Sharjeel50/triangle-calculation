@@ -44,11 +44,13 @@ class DataResult:
 
         # Loop through data
         # Check if products match
-        # if the origin and development date is the same, append product name and incremental value to res
-        # elif there is one development year, add the previous values incremental value to the currents and append
-        # do the same for two and three incremental development years and append dem tings in
-        # make sure i have another if for the last value in data since i am looping through - 2
-        # do the same for him and append.
+        # Check if the origin and development year match, if they do append
+        # Else check the num of iterations between origin and development year
+        # If its one or two, do the calcs manually,
+        # Else create a for loop between iterations and add all vals to incremental_val
+        # Append it to res
+        # Read last product from data since i am looping through minus 1
+        # Do the same cals on the last product and append to res
         for i in range(len(data) - 1):
             if data[i][0] == data[i + 1][0]:
                 if data[i][1] == data[i][2]:
@@ -63,9 +65,10 @@ class DataResult:
                         incremental_val = 0
                         for iterations_range in range(iterations):
                             incremental_val += float(data[i - iterations_range][3])
+                        if data[i][2] != int(data[i - 1][2]) - 1:
+                            res.append((data[i][0], incremental_val - float(data[i][3])))
                         res.append((data[i][0], incremental_val))
             else:
-                print(data[i][0])
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
                 else:
