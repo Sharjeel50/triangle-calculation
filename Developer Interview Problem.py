@@ -53,11 +53,19 @@ class DataResult:
             if data[i][0] == data[i + 1][0]:
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
-                elif int(data[i][1]) + 1 == int(data[i][2]):
-                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
                 else:
-                    res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3]) + float(data[i - 2][3])))
+                    iterations = int(data[i][2]) - int(data[i][1])
+                    if iterations == 1:
+                        res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3])))
+                    elif iterations == 2:
+                        res.append((data[i][0], float(data[i][3]) + float(data[i - 1][3]) + float(data[i - 2][3])))
+                    else:
+                        incremental_val = 0
+                        for iterations_range in range(iterations):
+                            incremental_val += float(data[i - iterations_range][3])
+                        res.append((data[i][0], incremental_val))
             else:
+                print(data[i][0])
                 if data[i][1] == data[i][2]:
                     res.append((data[i][0], data[i][3]))
                 else:
@@ -75,7 +83,7 @@ class DataResult:
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
     def make_res_csv(self):
-        with open("results" + self._file, 'w', newline='') as myfile:
+        with open("results_" + self._file, 'w', newline='') as myfile:
             wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
             wr.writerow()
 
