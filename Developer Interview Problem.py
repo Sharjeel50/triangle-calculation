@@ -65,7 +65,7 @@ class DataResult:
                         incremental_val = 0
                         for iterations_range in range(iterations):
                             incremental_val += float(data[i - iterations_range][3])
-                        if data[i][2] != int(data[i - 1][2]) - 1:
+                        if data[i][2] != int(data[i - 1][2]) - iterations_range:
                             res.append((data[i][0], incremental_val - float(data[i][3])))
                         res.append((data[i][0], incremental_val))
             else:
