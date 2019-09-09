@@ -16,8 +16,11 @@ class DataResult:
             # Skip Headers
             next(csv_reader)
             for data in csv_reader:
-                # product, origin_year, development_year, incremental_value
-                yield Triangle(data[0], data[1], data[2], data[3])
+                try:
+                    # product, origin_year, development_year, incremental_value
+                    yield Triangle(data[0], data[1], data[2], data[3])
+                except Exception as e:
+                    print(e)
 
     def product_splitting(self):
         products = {}
@@ -97,6 +100,7 @@ class DataResult:
 
     def format_result(self):
         data = {}
+
         for i in self.res:
             if i[0] not in data:
                 data[i[0]] = [float(i[1])]
@@ -111,9 +115,10 @@ class DataResult:
                 addition = len(data[long_val]) - len(data[key])
                 for i in range(addition):
                     data[key].insert(0, 0)
+            print(key, value)
+        print("\n")
 
         return data
-
 
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
