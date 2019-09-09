@@ -9,7 +9,7 @@ class DataResult:
         self.tupled_data()
         self.make_res_csv()
 
-    # Yielded to save memory
+    # Yielded to save memory instead of adding each obj to memory(in a list)
     def create_triangle_objects(self):
         with open(self._file, "r") as csv_file:
             csv_reader = csv.reader(csv_file)
@@ -21,6 +21,7 @@ class DataResult:
                     yield Triangle(data[0], data[1], data[2], data[3])
                 except Exception as e:
                     print(e)
+                    continue
 
     def product_splitting(self):
         products = {}
@@ -47,6 +48,7 @@ class DataResult:
 
         self.do_calc(data)
 
+    # Append dates into self.dates for later use
     def do_calc(self, data):
         for i in data:
             self.dates.append(int(i[1]))
@@ -57,6 +59,7 @@ class DataResult:
         # Check if the origin and development year match, if they do append
         # Else check the num of iterations between origin and development year
         # If its one or two, do the calcs manually,
+        # Run self.do_calc_iterations
         # Else create a for loop between iterations and add all vals to incremental_val
         # Append it to res
         # Read last product from data since i am looping through minus 1
@@ -84,6 +87,7 @@ class DataResult:
         elif int(data[-2][1]) + 1 == int(data[-1][2]):
             self.res.append((data[-1][0], float(data[-1][3]) + float(data[-2][3])))
 
+
     def do_calc_iterations(self, data, i, iter):
         incremental_val = 0
         actual_dates = []
@@ -98,6 +102,12 @@ class DataResult:
                 self.res.append((data[i][0], incremental_val - float(data[i][3])))
         self.res.append((data[i][0], incremental_val))
 
+
+    # Loop through self.res and put all the revelant data together
+    # Get the length of the max value in the dict for later use
+    # loop through data and check if the length of value is equal to max value,
+    # if it isnt, get the difference between the max val and length of current list
+    # and add 0's to the start.
     def format_result(self):
         data = {}
 
@@ -109,11 +119,11 @@ class DataResult:
 
         long_val = max(data, key=lambda x: len(data[x]))
 
-        addition = 0
+        get_difference = 0
         for key, value in data.items():
             if len(data[key]) != len(data[long_val]):
-                addition = len(data[long_val]) - len(data[key])
-                for i in range(addition):
+                get_difference = len(data[long_val]) - len(data[key])
+                for i in range(get_difference):
                     data[key].insert(0, 0)
             print(key, value)
         print("\n")
