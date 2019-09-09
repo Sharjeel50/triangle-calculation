@@ -7,9 +7,7 @@ class DataResult:
         self._file = file
         self.res, self.dates = [], []
         self.tupled_data()
-        self.format_result()
-
-    # self.make_res_csv()
+        self.make_res_csv()
 
     # Yielded to save memory
     def create_triangle_objects(self):
@@ -107,17 +105,15 @@ class DataResult:
 
         long_val = max(data, key=lambda x: len(data[x]))
 
-        iteration_range = 0
+        addition = 0
         for key, value in data.items():
             if len(data[key]) != len(data[long_val]):
-                iteration_range = len(data[long_val]) - len(data[key])
+                addition = len(data[long_val]) - len(data[key])
+                for i in range(addition):
+                    data[key].insert(0, 0)
 
-        print(data)
+        return data
 
-
-        #     if len(data[i]) != len(data[str(long_val)]):
-        #         data[i] += 0 * len([data[str(long_val)]]) - len(data[i])
-        # print(data)
 
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
