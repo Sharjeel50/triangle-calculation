@@ -1,5 +1,6 @@
 from Calculate import DataResult
 
+
 def main():
     print("\n")
     print("Enter 'Exit' to close program")
@@ -8,13 +9,14 @@ def main():
     if file == "exit.csv" or file == "Exit.csv":
         exit()
     else:
-        try:
-            DataResult(file)
-            main()
-        except Exception as e:
-            print(e, "\n")
-            print(" - Try Again - ")
-            main()
+        DataResult(file)
+        # try:
+        #     DataResult(file)
+        #     main()
+        # except Exception as e:
+        #     print(e, "\n")
+        #     print(" - Try Again - ")
+        #     main()
 
 
 if __name__ == "__main__":

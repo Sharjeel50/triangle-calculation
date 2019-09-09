@@ -4,10 +4,10 @@ from Triangle import Triangle
 
 class DataResult:
     def __init__(self, file):
-        self.res = []
         self._file = file
-        self.res = []
+        self.res, self.dates = [], []
         self.tupled_data()
+        self.make_res_csv()
 
     # Yielded to save memory
     def create_triangle_objects(self):
@@ -45,6 +45,10 @@ class DataResult:
         self.do_calc(data)
 
     def do_calc(self, data):
+        for i in data:
+            self.dates.append(int(i[1]))
+            self.dates.append(int(i[2]))
+
         # Loop through data
         # Check if products match
         # Check if the origin and development year match, if they do append
@@ -77,8 +81,6 @@ class DataResult:
         elif int(data[-2][1]) + 1 == int(data[-1][2]):
             self.res.append((data[-1][0], float(data[-1][3]) + float(data[-2][3])))
 
-        print(self.res)
-
     def do_calc_iterations(self, data, i, iter):
         incremental_val = 0
         actual_dates = []
@@ -93,10 +95,22 @@ class DataResult:
                 self.res.append((data[i][0], incremental_val - float(data[i][3])))
         self.res.append((data[i][0], incremental_val))
 
+    def format_result(self):
+        data = {}
+        for i in self.res:
+            if i[0] not in data:
+                data[i[0]] = [float(i[1])]
+            else:
+                data[i[0]] += [float(i[1])]
+
+        return data
+
     # Make new csv file and add it to the current folder with the result data inside
     # print out that the file is made
     def make_res_csv(self):
         with open("Result_File_" + self._file, 'w', newline='') as my_file:
             wr = csv.writer(my_file, quoting=csv.QUOTE_ALL)
-            wr.writerow(self.res)
+            wr.writerow([min(self.dates), max(self.dates) - min(self.dates) + 1])
+            for i, j in self.format_result().items():
+                wr.writerow([i, j])
             print("Result_File_" + self._file, "Created, Check your directory!")
