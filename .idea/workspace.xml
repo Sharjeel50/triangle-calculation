@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a397172-e4b5-42a9-aeaa-419e85bc79d1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Willis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Willis.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Calculate.py" beforeDir="false" afterPath="$PROJECT_DIR$/Calculate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Run.py" beforeDir="false" afterPath="$PROJECT_DIR$/Run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/default.csv" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
