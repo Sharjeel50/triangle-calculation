@@ -9,7 +9,7 @@ def main():
     if file == "exit.csv" or file == "Exit.csv":
         exit()
     else:
-        # DataResult(file)
+        DataResult(file)
         try:
             DataResult(file)
             main()

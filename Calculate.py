@@ -37,9 +37,12 @@ class DataResult:
                     print(e)
 
     def group_data_splitting(self):
+        """
+        Loop through yielded data
+        Keep key as product and values as the rest and return
+        :return:
+        """
         products = {}
-        # Loop through yielded data
-        # Keep key as product and values as the rest and return
         for objects in self.create_triangle_objects():
             if objects.product not in products:
                 products[objects.product] = [
