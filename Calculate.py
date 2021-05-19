@@ -5,14 +5,19 @@ from Triangle import Triangle
 class DataResult:
     def __init__(self, file):
         self._file = file
+        self.fin_results = []
         self.res, self.dates = [], []
         self.tupled_data()
         self.make_res_csv()
 
-    # Yielded to save memory instead of adding each obj to memory(in a list)
-    # Create some checks on the file while looping through it
-    # Let user know
+
     def create_triangle_objects(self):
+        """
+        Yielded to save memory instead of adding each obj to memory(in a list)
+        Create some checks on the file while looping through it
+        Let user know
+        :return:
+        """
         with open(self._file, "r") as csv_file:
             csv_reader = csv.reader(csv_file)
 
@@ -45,9 +50,12 @@ class DataResult:
 
         return products
 
-    # Tuple all the data up along side the correct vals (origin_date, development_date, incremental_val)
-    # Run self.do_calc on the data
     def tupled_data(self):
+        """
+        Tuple all the data up along side the correct vals (origin_date, development_date, incremental_val)
+        Run self.do_calc on the data
+        :return:
+        """
         data = []
         for k, rows in self.group_data_splitting().items():
             for row in rows:
@@ -57,15 +65,17 @@ class DataResult:
         self.calculate_icremental_value(data)
 
     def calculate_icremental_value(self, data):
-        # Append dates into self.dates for later use
-        # Loop through data
-        # Check if products match
-        # Check if the origin and development year match, if they do append curr incremental val
-        # Else check the num of iterations between origin and development year
-        # If its one, do the calcs manually,
-        # Run self.do_calc_iterations
-        # Read last product from data since i am looping through minus 1
-        # Do the same cals on the last product and append to res
+        """
+        Append dates into self.dates for later use
+        Loop through data
+        Check if products match
+        Check if the origin and development year match, if they do append curr incremental val
+        Else check the num of iterations between origin and development year
+        If its one, do the calcs manually,
+        Run self.do_calc_iterations
+        Read last product from data since i am looping through minus 1
+        Do the same cals on the last product and append to res
+        """
         for i in data:
             self.dates.append(int(i[1]))
             self.dates.append(int(i[2]))
@@ -96,13 +106,19 @@ class DataResult:
                 inc_val += float(data[-1 - i][3])
             self.res.append((data[-1][0], inc_val))
 
-    # Loop through iteration range passed in
-    # Get the missing dates
-    # Loop through the range for missing dates
-    # Check if the missing dates would equal development year
-    # If it is, append data
-    # Append normal incremetal_vals without missing dates at the end
     def icremental_value_iterations(self, data, i, iter):
+        """
+        Loop through iteration range passed in
+        Get the missing dates
+        Loop through the range for missing dates
+        Check if the missing dates would equal development year
+        If it is, append data
+        Append normal incremetal_vals without missing dates at the end
+        :param data:
+        :param i:
+        :param iter:
+        :return:
+        """
         actual_dates = []
         incremental_val = 0
         missing_dates = 0
@@ -117,12 +133,15 @@ class DataResult:
                 self.res.append((data[i][0], incremental_val - float(data[i][3])))
         self.res.append((data[i][0], incremental_val))
 
-    # Loop through self.res and put all the revelant data together
-    # Get the length of the max value in the dict for later use
-    # loop through data and check if the length of value is equal to max value,
-    # if it isnt, get the difference between the max val and length of current list
-    # and add 0's to the start.
     def format_results(self):
+        """
+        Loop through self.res and put all the revelant data together
+        Get the length of the max value in the dict for later use
+        loop through data and check if the length of value is equal to max value,
+        if it isnt, get the difference between the max val and length of current list
+        and add 0's to the start.
+        :return:
+        """
         data = {}
         for i in self.res:
             if i[0] not in data:
@@ -141,12 +160,17 @@ class DataResult:
 
         return data
 
-    # Make new csv file and add it to the current folder with the result data inside
-    # print out that the file is made
     def make_res_csv(self):
+        """
+        Make new csv file and add it to the current folder with the result data inside
+        print out that the file is made
+        :return:
+        """
+        results = self.format_results()
+        self.fin_results.append(results)
         with open("Result_File_" + self._file, 'w', newline='') as my_file:
             wr = csv.writer(my_file, quoting=csv.QUOTE_ALL)
             wr.writerow([min(self.dates), max(self.dates) - min(self.dates) + 1])
-            for i, j in self.format_results().items():
+            for i, j in results.items():
                 wr.writerow([i, ",".join(str(i) for i in j)])
             print("Result_File_" + self._file, "Created, Check your directory!")
